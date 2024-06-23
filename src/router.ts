@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express'
-import { getLinks } from './controllers/linksController.js'
+import { getLinks, postLinks } from './controllers/linksController.js'
 
 const router = express.Router();
 
@@ -15,5 +15,6 @@ router.get('/', (req, res) => {
 })
 
 router.get('/links', getLinks)
+router.post('/links', postLinks);
 
 export default router;
