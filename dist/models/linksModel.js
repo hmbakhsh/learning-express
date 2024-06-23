@@ -3,16 +3,28 @@ import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from '../db/schema.js';
 const { Client } = pg;
-const client = new Client();
-const db = drizzle(client, { schema });
+export class LinkModel {
+    static getLink = async () => {
+        const client = new Client();
+        const db = drizzle(client, { schema });
+        await client.connect();
+        const res = await db.select().from(schema.links);
+        await client.end();
+        return res;
+    };
+}
 // Using Drizzle to interact with the Databse
 export const getLinksDB = async () => {
+    const client = new Client();
+    const db = drizzle(client, { schema });
     await client.connect();
     const res = await db.select().from(schema.links);
     await client.end();
     return res;
 };
 export const postLinksDB = async (newLink) => {
+    const client = new Client();
+    const db = drizzle(client, { schema });
     try {
         await client.connect();
         const res = await db.insert(schema.links).values(newLink).returning({ insertedId: schema.links.id });
@@ -21,9 +33,11 @@ export const postLinksDB = async (newLink) => {
     }
     catch (err) {
         await client.end();
-        throw new Error('Unable to insert data into the Database. Try again.');
+        throw new Error(err);
     }
 };
+// TO-DO LIST
+// ! Need to convert to connection pooling
 // PREVIOUS DATABASE CONNECTION IMPLEMENTATIONS
 // Interacting with DB directly through node-postgres ('pg')
 // export const getLinksDBOld = async () => {

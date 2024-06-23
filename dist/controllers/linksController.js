@@ -1,7 +1,7 @@
-import { getLinksDB, postLinksDB } from '../models/linksModel.js';
+import { LinkModel, postLinksDB } from '../models/linksModel.js';
 export const getLinks = async (req, res) => {
     res.status(200);
-    res.send(await getLinksDB());
+    res.send(await LinkModel.getLink());
 };
 export const postLinks = async (req, res) => {
     try {
